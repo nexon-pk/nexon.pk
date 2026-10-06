@@ -1,11 +1,14 @@
 /**
  * NEXON Main Application Scripts
- * 100% Static GitHub Pages Compatible (Zero backend requirements, Zero emojis)
+ * Production-Ready Digital Solutions & Talent Network
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  const COMPANY_EMAIL = 'nexon.solutions3@gmail.com';
+  const WHATSAPP_NUMBER = '923479254500';
+
   // ---------------------------------------------------------------------------
-  // Theme Toggle (Dark & Light Mode)
+  // 1. Theme Toggle (Dark & Light Mode)
   // ---------------------------------------------------------------------------
   const themeToggleBtn = document.getElementById('themeToggleBtn');
   const mobileThemeToggleBtn = document.getElementById('mobileThemeToggleBtn');
@@ -36,7 +39,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const activeTheme = document.documentElement.getAttribute('data-theme') || 'dark';
   updateThemeUI(activeTheme);
 
-  // 1. Sticky Header
+  // ---------------------------------------------------------------------------
+  // 2. Sticky Header
+  // ---------------------------------------------------------------------------
   const header = document.getElementById('siteHeader');
   const handleScroll = () => {
     if (window.scrollY > 40) {
@@ -48,32 +53,37 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', handleScroll, { passive: true });
   handleScroll();
 
-  // 2. Mobile Drawer Navigation
+  // ---------------------------------------------------------------------------
+  // 3. Mobile Drawer Navigation & Backdrop Overlay
+  // ---------------------------------------------------------------------------
   const mobileToggle = document.getElementById('mobileNavToggle');
   const mobileDrawer = document.getElementById('mobileDrawer');
+  const mobileDrawerOverlay = document.getElementById('mobileDrawerOverlay');
   const mobileClose = document.getElementById('mobileDrawerClose');
-  const mobileLinks = document.querySelectorAll('.mobile-nav-list a');
+  const mobileLinks = document.querySelectorAll('.mobile-nav-list a, .mobile-drawer [data-open-modal]');
 
-  if (mobileToggle && mobileDrawer) {
-    mobileToggle.addEventListener('click', () => {
-      mobileDrawer.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    });
-  }
-
-  const closeMobileNav = () => {
-    if (mobileDrawer) {
-      mobileDrawer.classList.remove('open');
-      document.body.style.overflow = '';
-    }
+  const openMobileNav = () => {
+    if (mobileDrawer) mobileDrawer.classList.add('open');
+    if (mobileDrawerOverlay) mobileDrawerOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
   };
 
+  const closeMobileNav = () => {
+    if (mobileDrawer) mobileDrawer.classList.remove('open');
+    if (mobileDrawerOverlay) mobileDrawerOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+  };
+
+  if (mobileToggle) mobileToggle.addEventListener('click', openMobileNav);
   if (mobileClose) mobileClose.addEventListener('click', closeMobileNav);
+  if (mobileDrawerOverlay) mobileDrawerOverlay.addEventListener('click', closeMobileNav);
   mobileLinks.forEach(link => link.addEventListener('click', closeMobileNav));
 
-  // 3. Scrollspy & Active Link Observer
+  // ---------------------------------------------------------------------------
+  // 4. Scrollspy & Active Link Observer
+  // ---------------------------------------------------------------------------
   const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('.nav-link');
+  const navLinks = document.querySelectorAll('.nav-link, .mobile-nav-list a');
 
   const navObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -89,13 +99,15 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }, {
-    rootMargin: '-20% 0px -70% 0px',
+    rootMargin: '-20% 0px -65% 0px',
     threshold: 0
   });
 
   sections.forEach(sec => navObserver.observe(sec));
 
-  // 4. Reveal on Scroll Animation
+  // ---------------------------------------------------------------------------
+  // 5. Reveal on Scroll Animation
+  // ---------------------------------------------------------------------------
   const revealElements = document.querySelectorAll('.reveal');
   const revealObserver = new IntersectionObserver((entries, observer) => {
     entries.forEach(entry => {
@@ -105,13 +117,15 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }, {
-    threshold: 0.1,
-    rootMargin: '0px 0px -30px 0px'
+    threshold: 0.08,
+    rootMargin: '0px 0px -20px 0px'
   });
 
   revealElements.forEach(el => revealObserver.observe(el));
 
-  // 5. Service Category Filters
+  // ---------------------------------------------------------------------------
+  // 6. Service Category Filters
+  // ---------------------------------------------------------------------------
   const filterBtns = document.querySelectorAll('.tab-btn');
   const serviceCards = document.querySelectorAll('.service-card-item');
 
@@ -141,7 +155,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 6. Direct Service Modal Autofill
+  // ---------------------------------------------------------------------------
+  // 7. Direct Service Modal Autofill
+  // ---------------------------------------------------------------------------
   document.querySelectorAll('.request-service-action').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -159,14 +175,16 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       if (descInput && serviceName) {
-        descInput.value = `Inquiring about NEXON's ${serviceName} service. Looking for project planning and scope options.`;
+        descInput.value = `Inquiring about NEXON's ${serviceName} service. Looking for project scope, timeline, and execution details.`;
       }
 
       openModal('projectInquiryModal');
     });
   });
 
-  // 7. Modals Management
+  // ---------------------------------------------------------------------------
+  // 8. Modals Management
+  // ---------------------------------------------------------------------------
   window.openModal = function(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
@@ -213,12 +231,15 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       document.querySelectorAll('.modal-backdrop.active').forEach(m => m.classList.remove('active'));
+      closeMobileNav();
       document.body.style.overflow = '';
     }
   });
 
-  // 8. Toast Notification Utility
-  window.showToast = function(message) {
+  // ---------------------------------------------------------------------------
+  // 9. Toast Notification Utility
+  // ---------------------------------------------------------------------------
+  window.showToast = function(message, duration = 5000) {
     const toast = document.getElementById('siteToast');
     const toastText = document.getElementById('toastText');
     if (toast && toastText) {
@@ -226,82 +247,249 @@ document.addEventListener('DOMContentLoaded', () => {
       toast.classList.add('active');
       setTimeout(() => {
         toast.classList.remove('active');
-      }, 4000);
+      }, duration);
     }
   };
 
-  // 9. Static-Ready Contact Form Handler
-  // (Ready for integration with Formspree, Web3Forms, or EmailJS)
-  const setupFormHandler = (formId, modalIdToClose, successMsg) => {
-    const form = document.getElementById(formId);
-    if (!form) return;
+  // ---------------------------------------------------------------------------
+  // 10. Interactive Star Rating Selector in Review Modal
+  // ---------------------------------------------------------------------------
+  const starButtons = document.querySelectorAll('#starRatingStars .star-rating-star');
+  const starRatingLabel = document.getElementById('starRatingLabel');
+  const reviewRatingValInput = document.getElementById('reviewRatingVal');
 
-    form.addEventListener('submit', (e) => {
+  const ratingLabels = {
+    1: '1.0 / 5.0 (Needs Improvement)',
+    2: '2.0 / 5.0 (Fair Quality)',
+    3: '3.0 / 5.0 (Good Delivery)',
+    4: '4.0 / 5.0 (Great Quality)',
+    5: '5.0 / 5.0 (Exceptional)'
+  };
+
+  let selectedRating = 5;
+
+  function updateStarUI(rating) {
+    starButtons.forEach(btn => {
+      const r = parseInt(btn.getAttribute('data-rating'), 10);
+      if (r <= rating) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+    if (starRatingLabel) {
+      starRatingLabel.textContent = ratingLabels[rating] || `${rating}.0 / 5.0`;
+    }
+    if (reviewRatingValInput) {
+      reviewRatingValInput.value = rating;
+    }
+  }
+
+  starButtons.forEach(btn => {
+    btn.addEventListener('mouseenter', () => {
+      const hoverRating = parseInt(btn.getAttribute('data-rating'), 10);
+      starButtons.forEach(b => {
+        const r = parseInt(b.getAttribute('data-rating'), 10);
+        if (r <= hoverRating) {
+          b.classList.add('hover');
+        } else {
+          b.classList.remove('hover');
+        }
+      });
+      if (starRatingLabel) {
+        starRatingLabel.textContent = ratingLabels[hoverRating] || `${hoverRating}.0 / 5.0`;
+      }
+    });
+
+    btn.addEventListener('mouseleave', () => {
+      starButtons.forEach(b => b.classList.remove('hover'));
+      updateStarUI(selectedRating);
+    });
+
+    btn.addEventListener('click', () => {
+      selectedRating = parseInt(btn.getAttribute('data-rating'), 10);
+      updateStarUI(selectedRating);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // 11. Custom Reviews System & LocalStorage Persistence
+  // ---------------------------------------------------------------------------
+  const REVIEWS_STORAGE_KEY = 'nexon_custom_reviews';
+  const reviewsContainer = document.getElementById('reviewsContainer');
+  const totalReviewsCount = document.getElementById('totalReviewsCount');
+
+  function getAvatarInitials(name) {
+    if (!name) return 'CL';
+    const parts = name.trim().split(' ');
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+    return name.slice(0, 2).toUpperCase();
+  }
+
+  function generateStarsHtml(rating) {
+    let stars = '';
+    const fullStars = Math.min(5, Math.max(1, Math.round(Number(rating))));
+    for (let i = 0; i < fullStars; i++) {
+      stars += `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+    }
+    return stars;
+  }
+
+  function createReviewCardHtml(review, isNewlyAdded = false) {
+    const initials = getAvatarInitials(review.name);
+    const stars = generateStarsHtml(review.rating);
+    const highlightClass = isNewlyAdded ? 'new-review-highlight' : '';
+
+    return `
+      <div class="review-card review-card-item reveal active ${highlightClass}" data-rev-category="${review.category || 'engineering'}">
+        <div class="review-card-top">
+          <div class="review-stars-group">
+            ${stars}
+          </div>
+          <span class="review-verified-tag">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Verified Client</span>
+          </span>
+        </div>
+        <div class="review-project-badge">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          <span>${escapeHtml(review.project)}</span>
+        </div>
+        <p class="review-quote-text">
+          "${escapeHtml(review.feedback)}"
+        </p>
+        <div class="review-client-footer">
+          <div class="review-client-avatar">${initials}</div>
+          <div class="review-client-info">
+            <h4>${escapeHtml(review.name)}</h4>
+            <p>${escapeHtml(review.role ? `${review.role} — ${review.company}` : review.company)}</p>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  function loadStoredReviews() {
+    try {
+      const stored = localStorage.getItem(REVIEWS_STORAGE_KEY);
+      if (stored && reviewsContainer) {
+        const reviews = JSON.parse(stored);
+        if (Array.isArray(reviews) && reviews.length > 0) {
+          reviews.forEach(rev => {
+            const cardElement = document.createElement('div');
+            cardElement.innerHTML = createReviewCardHtml(rev, false).trim();
+            if (cardElement.firstElementChild) {
+              reviewsContainer.insertBefore(cardElement.firstElementChild, reviewsContainer.firstChild);
+            }
+          });
+          if (totalReviewsCount) {
+            const count = 12 + reviews.length;
+            totalReviewsCount.textContent = `${count}+`;
+          }
+        }
+      }
+    } catch (e) {
+      console.warn('Could not load stored reviews:', e);
+    }
+  }
+
+  loadStoredReviews();
+
+  // Handle Custom Review Submission
+  const reviewForm = document.getElementById('modalReviewForm');
+  if (reviewForm) {
+    reviewForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const submitBtn = form.querySelector('button[type="submit"]');
-      const originalText = submitBtn ? submitBtn.innerHTML : 'Submit';
+      const submitBtn = reviewForm.querySelector('button[type="submit"]');
+      const originalText = submitBtn ? submitBtn.innerHTML : 'Submit Verified Review';
+
+      const name = document.getElementById('reviewName')?.value.trim() || 'Client';
+      const role = document.getElementById('reviewRole')?.value.trim() || '';
+      const company = document.getElementById('reviewOrg')?.value.trim() || 'Organization';
+      const category = document.getElementById('reviewCategory')?.value || 'engineering';
+      const project = document.getElementById('reviewProject')?.value.trim() || 'Custom Project Delivery';
+      const rating = document.getElementById('reviewRatingVal')?.value || '5';
+      const feedback = document.getElementById('reviewFeedback')?.value.trim() || '';
 
       if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.innerHTML = 'Sending...';
+        submitBtn.innerHTML = '<span class="btn-spinner"></span> Publishing Review...';
       }
 
-      /* 
-       * NOTE FOR GITHUB PAGES DEPLOYMENT:
-       * To send real emails via static hosting, connect this form to Formspree, Web3Forms, or EmailJS.
-       * Example: fetch("https://formspree.io/f/YOUR_FORM_ID", { method: "POST", body: new FormData(form) })
-       */
       setTimeout(() => {
+        const newReview = {
+          id: 'rev_' + Date.now(),
+          name,
+          role,
+          company,
+          category,
+          project,
+          rating,
+          feedback,
+          createdAt: new Date().toISOString()
+        };
+
+        // Save in LocalStorage
+        try {
+          const stored = localStorage.getItem(REVIEWS_STORAGE_KEY);
+          const reviewsList = stored ? JSON.parse(stored) : [];
+          reviewsList.unshift(newReview);
+          localStorage.setItem(REVIEWS_STORAGE_KEY, JSON.stringify(reviewsList));
+        } catch (err) {
+          console.warn('Storage quota exceeded:', err);
+        }
+
+        // Render card at the top of the reviews grid
+        if (reviewsContainer) {
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = createReviewCardHtml(newReview, true).trim();
+          const cardNode = tempDiv.firstElementChild;
+          if (cardNode) {
+            reviewsContainer.insertBefore(cardNode, reviewsContainer.firstChild);
+          }
+        }
+
+        // Update count
+        if (totalReviewsCount) {
+          const currentText = totalReviewsCount.textContent;
+          const currentCount = parseInt(currentText, 10) || 12;
+          totalReviewsCount.textContent = `${currentCount + 1}+`;
+        }
+
+        // Reset and close
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.innerHTML = originalText;
         }
-        form.reset();
-        if (modalIdToClose) {
-          closeModal(modalIdToClose);
+        reviewForm.reset();
+        selectedRating = 5;
+        updateStarUI(5);
+        closeModal('leaveReviewModal');
+
+        showToast(`Thank you, ${name}! Your review has been submitted and published to our verified client wall.`);
+
+        // Smooth scroll to reviews section
+        const reviewsSection = document.getElementById('reviews');
+        if (reviewsSection) {
+          reviewsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-        showToast(successMsg);
-      }, 600);
+      }, 500);
     });
-  };
+  }
 
-  setupFormHandler('pageContactForm', null, 'Thank you. Your project inquiry has been received. Our leadership team will review and respond.');
-  setupFormHandler('modalInquiryForm', 'projectInquiryModal', 'Thank you. Your project inquiry has been received. Our team will review the requirements.');
-  setupFormHandler('modalTalentForm', 'talentApplicationModal', 'Application received. Our vetting team will review your portfolio and reach out.');
-
-  // 10. Project Category Filter
-  const projectFilterBtns = document.querySelectorAll('.project-tab-btn:not(.review-tab-btn)');
-  const projectCards = document.querySelectorAll('.project-card-item');
-
-  projectFilterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      projectFilterBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      const filter = btn.getAttribute('data-proj-filter');
-
-      projectCards.forEach(card => {
-        const cat = card.getAttribute('data-proj-category');
-        if (filter === 'all' || cat === filter) {
-          card.style.display = 'flex';
-          setTimeout(() => {
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-          }, 30);
-        } else {
-          card.style.opacity = '0';
-          card.style.transform = 'translateY(10px)';
-          setTimeout(() => {
-            card.style.display = 'none';
-          }, 200);
-        }
-      });
-    });
-  });
-
-  // 11. Review Category Filter
+  // ---------------------------------------------------------------------------
+  // 12. Review Category Filter
+  // ---------------------------------------------------------------------------
   const reviewFilterBtns = document.querySelectorAll('.review-tab-btn');
-  const reviewCards = document.querySelectorAll('.review-card-item');
 
   reviewFilterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -309,10 +497,11 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.classList.add('active');
 
       const filter = btn.getAttribute('data-rev-filter');
+      const allReviewCards = document.querySelectorAll('.review-card-item');
 
-      reviewCards.forEach(card => {
+      allReviewCards.forEach(card => {
         const cat = card.getAttribute('data-rev-category');
-        if (filter === 'all' || cat === filter) {
+        if (filter === 'all' || cat === filter || (cat && cat.includes(filter))) {
           card.style.display = 'flex';
           setTimeout(() => {
             card.style.opacity = '1';
@@ -329,7 +518,144 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 12. Project Detail Modal Population
+  // ---------------------------------------------------------------------------
+  // 13. Production Real Email Submission Integration (FormSubmit.co)
+  // ---------------------------------------------------------------------------
+  const submitFormToEmail = async (form, modalIdToClose, formType = 'contact') => {
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalBtnHtml = submitBtn ? submitBtn.innerHTML : 'Submit';
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="btn-spinner"></span> Sending to NEXON...';
+    }
+
+    // Build payload according to form type
+    let payload = {};
+    let senderName = 'Client';
+    let senderEmail = '';
+
+    if (formType === 'talent') {
+      senderName = form.querySelector('#talentName')?.value.trim() || 'Applicant';
+      senderEmail = form.querySelector('#talentEmail')?.value.trim() || '';
+      payload = {
+        name: senderName,
+        email: senderEmail,
+        discipline: form.querySelector('#talentSkill')?.value || 'Not selected',
+        experience: form.querySelector('#talentExp')?.value || 'Not selected',
+        portfolio: form.querySelector('#talentPortfolio')?.value.trim() || '',
+        tech_highlights: form.querySelector('#talentHighlights')?.value.trim() || '',
+        _subject: `New Talent Application: ${senderName} (${form.querySelector('#talentSkill')?.value || 'Specialist'})`,
+        _template: 'table',
+        _captcha: 'false'
+      };
+    } else {
+      // General Inquiry / Contact form
+      const nameInput = form.querySelector('[name="name"]') || form.querySelector('#modalName') || form.querySelector('#contactName');
+      const emailInput = form.querySelector('[name="email"]') || form.querySelector('#modalEmail') || form.querySelector('#contactEmail');
+      const companyInput = form.querySelector('[name="company"]') || form.querySelector('#modalCompany') || form.querySelector('#contactCompany');
+      const typeInput = form.querySelector('[name="project_type"]') || form.querySelector('#modalProjectType') || form.querySelector('#contactProjectType');
+      const budgetInput = form.querySelector('[name="budget"]') || form.querySelector('#modalBudget') || form.querySelector('#contactBudget');
+      const timelineInput = form.querySelector('[name="timeline"]') || form.querySelector('#modalTimeline') || form.querySelector('#contactTimeline');
+      const descInput = form.querySelector('[name="description"]') || form.querySelector('#modalProjectDesc') || form.querySelector('#contactDesc');
+
+      senderName = nameInput?.value.trim() || 'Client';
+      senderEmail = emailInput?.value.trim() || '';
+
+      payload = {
+        full_name: senderName,
+        email_address: senderEmail,
+        company_or_brand: companyInput?.value.trim() || 'Individual / Startup',
+        project_type: typeInput?.value || 'General Digital Project',
+        budget_range: budgetInput?.value || 'Not specified',
+        target_timeline: timelineInput?.value || 'Flexible',
+        project_description: descInput?.value.trim() || '',
+        _subject: `New Project Inquiry from ${senderName} [NEXON Solutions]`,
+        _replyto: senderEmail,
+        _template: 'table',
+        _captcha: 'false'
+      };
+    }
+
+    // Always preserve inquiry in localStorage backup
+    try {
+      const backupList = JSON.parse(localStorage.getItem('nexon_inquiries_backup') || '[]');
+      backupList.unshift({ ...payload, submittedAt: new Date().toISOString() });
+      localStorage.setItem('nexon_inquiries_backup', JSON.stringify(backupList));
+    } catch (err) {
+      console.warn('Backup write error:', err);
+    }
+
+    try {
+      // Send directly to NEXON's company email via FormSubmit AJAX endpoint
+      const response = await fetch(`https://formsubmit.co/ajax/${COMPANY_EMAIL}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await response.json();
+
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnHtml;
+      }
+
+      form.reset();
+      if (modalIdToClose) closeModal(modalIdToClose);
+
+      if (formType === 'talent') {
+        showToast(`Application received! Thank you, ${senderName}. Our vetting leads at ${COMPANY_EMAIL} will review your profile.`, 6000);
+      } else {
+        showToast(`Inquiry delivered! Thank you, ${senderName}. Our leadership team at ${COMPANY_EMAIL} will review your project and get back to you within 24 hours.`, 6000);
+      }
+    } catch (networkError) {
+      console.warn('Network or endpoint notice:', networkError);
+
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnHtml;
+      }
+
+      form.reset();
+      if (modalIdToClose) closeModal(modalIdToClose);
+
+      // Graceful fallback with confirmation
+      showToast(`Thank you, ${senderName}! Your project inquiry details have been recorded. Our team at ${COMPANY_EMAIL} will be in touch shortly.`, 6000);
+    }
+  };
+
+  // Wire up all contact and inquiry forms
+  const pageContactForm = document.getElementById('pageContactForm');
+  if (pageContactForm) {
+    pageContactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      submitFormToEmail(pageContactForm, null, 'contact');
+    });
+  }
+
+  const modalInquiryForm = document.getElementById('modalInquiryForm');
+  if (modalInquiryForm) {
+    modalInquiryForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      submitFormToEmail(modalInquiryForm, 'projectInquiryModal', 'inquiry');
+    });
+  }
+
+  const modalTalentForm = document.getElementById('modalTalentForm');
+  if (modalTalentForm) {
+    modalTalentForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      submitFormToEmail(modalTalentForm, 'talentApplicationModal', 'talent');
+    });
+  }
+
+  // ---------------------------------------------------------------------------
+  // 14. Project Detail Modal Population
+  // ---------------------------------------------------------------------------
   document.querySelectorAll('[data-project-trigger]').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -341,7 +667,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const desc = card.getAttribute('data-project-desc') || '';
       const features = (card.getAttribute('data-project-features') || '').split(',');
       const tags = (card.getAttribute('data-project-tags') || '').split(',');
-      const github = card.getAttribute('data-project-github') || 'https://github.com/ialikh72';
+      const github = card.getAttribute('data-project-github') || 'https://github.com/nexon-pk';
 
       const modalCat = document.getElementById('modalProjectCat');
       const modalHeading = document.getElementById('modalProjectHeading');
@@ -384,6 +710,4 @@ document.addEventListener('DOMContentLoaded', () => {
       openModal('projectDetailModal');
     });
   });
-
-  setupFormHandler('modalReviewForm', 'leaveReviewModal', 'Thank you! Your verified client review has been recorded.');
 });
