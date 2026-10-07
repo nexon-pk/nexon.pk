@@ -183,56 +183,74 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ---------------------------------------------------------------------------
-  // 8. Modals Management
+  // 8. Universal Modals Management (Works on iOS, Android, Desktop, IoT/Touch)
   // ---------------------------------------------------------------------------
   window.openModal = function(modalId) {
+    if (!modalId) return;
     const modal = document.getElementById(modalId);
     if (modal) {
       modal.classList.add('active');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('modal-open');
       document.body.style.overflow = 'hidden';
+
+      // Autofocus first input for accessibility
+      const firstInput = modal.querySelector('input:not([type="hidden"]), select, textarea');
+      if (firstInput) {
+        setTimeout(() => {
+          try { firstInput.focus(); } catch (err) {}
+        }, 120);
+      }
     }
   };
 
   window.closeModal = function(modalId) {
+    if (!modalId) return;
     const modal = document.getElementById(modalId);
     if (modal) {
       modal.classList.remove('active');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+    const remainingOpen = document.querySelectorAll('.modal-backdrop.active');
+    if (remainingOpen.length === 0) {
+      document.body.classList.remove('modal-open');
       document.body.style.overflow = '';
     }
   };
 
-  document.querySelectorAll('[data-open-modal]').forEach(btn => {
-    btn.addEventListener('click', (e) => {
+  // Robust Global Event Delegation for all device types
+  document.addEventListener('click', (e) => {
+    const openTrigger = e.target.closest('[data-open-modal]');
+    if (openTrigger) {
       e.preventDefault();
-      const target = btn.getAttribute('data-open-modal');
-      openModal(target);
-    });
-  });
+      const modalId = openTrigger.getAttribute('data-open-modal');
+      if (modalId) {
+        openModal(modalId);
+      }
+      return;
+    }
 
-  document.querySelectorAll('[data-close-modal]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const modal = btn.closest('.modal-backdrop');
+    const closeTrigger = e.target.closest('[data-close-modal]');
+    if (closeTrigger) {
+      e.preventDefault();
+      const modal = closeTrigger.closest('.modal-backdrop');
       if (modal) {
-        modal.classList.remove('active');
-        document.body.style.overflow = '';
+        closeModal(modal.id);
       }
-    });
-  });
+      return;
+    }
 
-  document.querySelectorAll('.modal-backdrop').forEach(modal => {
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.classList.remove('active');
-        document.body.style.overflow = '';
-      }
-    });
+    if (e.target.classList && e.target.classList.contains('modal-backdrop')) {
+      closeModal(e.target.id);
+    }
   });
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-      document.querySelectorAll('.modal-backdrop.active').forEach(m => m.classList.remove('active'));
+      document.querySelectorAll('.modal-backdrop.active').forEach(m => {
+        closeModal(m.id);
+      });
       closeMobileNav();
-      document.body.style.overflow = '';
     }
   });
 
@@ -252,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // ---------------------------------------------------------------------------
-  // 10. Interactive Star Rating Selector in Review Modal
+  // 10. Interactive Star Rating Selector in Review Modal (Touch & Click Friendly)
   // ---------------------------------------------------------------------------
   const starButtons = document.querySelectorAll('#starRatingStars .star-rating-star');
   const starRatingLabel = document.getElementById('starRatingLabel');
@@ -269,6 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let selectedRating = 5;
 
   function updateStarUI(rating) {
+    selectedRating = rating;
     starButtons.forEach(btn => {
       const r = parseInt(btn.getAttribute('data-rating'), 10);
       if (r <= rating) {
@@ -276,6 +295,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         btn.classList.remove('active');
       }
+      btn.classList.remove('hover');
     });
     if (starRatingLabel) {
       starRatingLabel.textContent = ratingLabels[rating] || `${rating}.0 / 5.0`;
@@ -286,34 +306,41 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   starButtons.forEach(btn => {
-    btn.addEventListener('mouseenter', () => {
-      const hoverRating = parseInt(btn.getAttribute('data-rating'), 10);
-      starButtons.forEach(b => {
-        const r = parseInt(b.getAttribute('data-rating'), 10);
-        if (r <= hoverRating) {
-          b.classList.add('hover');
-        } else {
-          b.classList.remove('hover');
+    // Pointer hover for desktop
+    btn.addEventListener('pointerenter', (e) => {
+      if (e.pointerType === 'mouse') {
+        const hoverRating = parseInt(btn.getAttribute('data-rating'), 10);
+        starButtons.forEach(b => {
+          const r = parseInt(b.getAttribute('data-rating'), 10);
+          if (r <= hoverRating) {
+            b.classList.add('hover');
+          } else {
+            b.classList.remove('hover');
+          }
+        });
+        if (starRatingLabel) {
+          starRatingLabel.textContent = ratingLabels[hoverRating] || `${hoverRating}.0 / 5.0`;
         }
-      });
-      if (starRatingLabel) {
-        starRatingLabel.textContent = ratingLabels[hoverRating] || `${hoverRating}.0 / 5.0`;
       }
     });
 
-    btn.addEventListener('mouseleave', () => {
-      starButtons.forEach(b => b.classList.remove('hover'));
-      updateStarUI(selectedRating);
+    btn.addEventListener('pointerleave', (e) => {
+      if (e.pointerType === 'mouse') {
+        starButtons.forEach(b => b.classList.remove('hover'));
+        updateStarUI(selectedRating);
+      }
     });
 
-    btn.addEventListener('click', () => {
-      selectedRating = parseInt(btn.getAttribute('data-rating'), 10);
-      updateStarUI(selectedRating);
+    // Tap / Click for all devices
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const r = parseInt(btn.getAttribute('data-rating'), 10);
+      updateStarUI(r);
     });
   });
 
   // ---------------------------------------------------------------------------
-  // 11. Custom Reviews System & LocalStorage Persistence
+  // 11. Dynamic Verified Reviews System & LocalStorage Persistence
   // ---------------------------------------------------------------------------
   const REVIEWS_STORAGE_KEY = 'nexon_custom_reviews';
   const reviewsContainer = document.getElementById('reviewsContainer');
@@ -337,13 +364,20 @@ document.addEventListener('DOMContentLoaded', () => {
     return stars;
   }
 
+  function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
   function createReviewCardHtml(review, isNewlyAdded = false) {
     const initials = getAvatarInitials(review.name);
     const stars = generateStarsHtml(review.rating);
     const highlightClass = isNewlyAdded ? 'new-review-highlight' : '';
 
     return `
-      <div class="review-card review-card-item reveal active ${highlightClass}" data-rev-category="${review.category || 'engineering'}">
+      <div class="review-card review-card-item reveal active ${highlightClass}" data-rev-category="${escapeHtml(review.category || 'engineering')}">
         <div class="review-card-top">
           <div class="review-stars-group">
             ${stars}
@@ -371,38 +405,54 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
   }
 
-  function escapeHtml(text) {
-    if (!text) return '';
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  }
+  function renderReviewsUI() {
+    if (!reviewsContainer) return;
 
-  function loadStoredReviews() {
+    let reviewsList = [];
     try {
       const stored = localStorage.getItem(REVIEWS_STORAGE_KEY);
-      if (stored && reviewsContainer) {
-        const reviews = JSON.parse(stored);
-        if (Array.isArray(reviews) && reviews.length > 0) {
-          reviews.forEach(rev => {
-            const cardElement = document.createElement('div');
-            cardElement.innerHTML = createReviewCardHtml(rev, false).trim();
-            if (cardElement.firstElementChild) {
-              reviewsContainer.insertBefore(cardElement.firstElementChild, reviewsContainer.firstChild);
-            }
-          });
-          if (totalReviewsCount) {
-            const count = 12 + reviews.length;
-            totalReviewsCount.textContent = `${count}+`;
-          }
-        }
+      if (stored) {
+        reviewsList = JSON.parse(stored);
       }
     } catch (e) {
-      console.warn('Could not load stored reviews:', e);
+      console.warn('Could not read reviews from storage:', e);
+    }
+
+    if (Array.isArray(reviewsList) && reviewsList.length > 0) {
+      let cardsHtml = '';
+      reviewsList.forEach(rev => {
+        cardsHtml += createReviewCardHtml(rev, false);
+      });
+      reviewsContainer.innerHTML = cardsHtml;
+
+      if (totalReviewsCount) {
+        totalReviewsCount.textContent = `${reviewsList.length + 12}+`;
+      }
+    } else {
+      // Empty state encouraging real client feedback
+      reviewsContainer.innerHTML = `
+        <div class="reviews-empty-state reveal active" style="grid-column: 1 / -1; text-align: center; padding: 3rem 1.5rem; background: var(--bg-card); border: 1px dashed rgba(56, 189, 248, 0.35); border-radius: var(--radius-2xl);">
+          <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--gradient-badge); border: 1.5px solid var(--border-accent); display: inline-flex; align-items: center; justify-content: center; color: var(--brand-cyan); margin-bottom: 1.25rem;">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <h3 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 0.5rem;">Verified Client Reviews</h3>
+          <p style="font-size: 0.925rem; color: var(--text-secondary); max-width: 520px; margin: 0 auto 1.5rem; line-height: 1.6;">
+            Have you worked with NEXON on a software build, AI workflow, or design delivery? Share your verified feedback to be featured directly on our client wall.
+          </p>
+          <button type="button" class="btn btn-primary" data-open-modal="leaveReviewModal" onclick="openModal('leaveReviewModal')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <span>Write a Custom Client Review</span>
+          </button>
+        </div>
+      `;
+      if (totalReviewsCount) {
+        totalReviewsCount.textContent = '12+';
+      }
     }
   }
 
-  loadStoredReviews();
+  // Initial load of verified reviews
+  renderReviewsUI();
 
   // Handle Custom Review Submission
   const reviewForm = document.getElementById('modalReviewForm');
@@ -448,24 +498,10 @@ document.addEventListener('DOMContentLoaded', () => {
           console.warn('Storage quota exceeded:', err);
         }
 
-        // Render card at the top of the reviews grid
-        if (reviewsContainer) {
-          const tempDiv = document.createElement('div');
-          tempDiv.innerHTML = createReviewCardHtml(newReview, true).trim();
-          const cardNode = tempDiv.firstElementChild;
-          if (cardNode) {
-            reviewsContainer.insertBefore(cardNode, reviewsContainer.firstChild);
-          }
-        }
+        // Re-render UI and insert new card with highlight
+        renderReviewsUI();
 
-        // Update count
-        if (totalReviewsCount) {
-          const currentText = totalReviewsCount.textContent;
-          const currentCount = parseInt(currentText, 10) || 12;
-          totalReviewsCount.textContent = `${currentCount + 1}+`;
-        }
-
-        // Reset and close
+        // Reset and close modal
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.innerHTML = originalText;
@@ -475,7 +511,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateStarUI(5);
         closeModal('leaveReviewModal');
 
-        showToast(`Thank you, ${name}! Your review has been submitted and published to our verified client wall.`);
+        showToast(`Thank you, ${name}! Your review has been published to our verified client wall.`);
 
         // Smooth scroll to reviews section
         const reviewsSection = document.getElementById('reviews');

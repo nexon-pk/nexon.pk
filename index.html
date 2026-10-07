@@ -556,7 +556,7 @@
         </div>
 
         <!-- 4 Key Professional Project Stats -->
-        <div class="delivery-metrics-grid stats-grid-4 reveal delay-1" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 2.5rem;">
+        <div class="delivery-metrics-grid stats-grid-4 reveal delay-1" style="margin-bottom: 2.5rem;">
           <div class="delivery-stat-tile" style="text-align: center; padding: 1.5rem 1rem;">
             <div class="delivery-stat-val" style="font-size: 2.5rem;">12+</div>
             <div class="delivery-stat-label" style="font-size: 0.95rem;">Completed Projects</div>
@@ -598,28 +598,28 @@
             <div class="reviews-highlights-list">
               <div class="review-highlight-item">
                 <span>Client Satisfaction Rate</span>
-                <div style="display:flex; align-items:center; gap:0.75rem;">
+                <div>
                   <div class="review-progress-track"><div class="review-progress-fill"></div></div>
                   <strong style="color:#10b981; font-family:var(--font-mono);">100%</strong>
                 </div>
               </div>
               <div class="review-highlight-item">
                 <span>On-Time Milestone Delivery</span>
-                <div style="display:flex; align-items:center; gap:0.75rem;">
+                <div>
                   <div class="review-progress-track"><div class="review-progress-fill"></div></div>
                   <strong style="color:#10b981; font-family:var(--font-mono);">100%</strong>
                 </div>
               </div>
               <div class="review-highlight-item">
                 <span>Quality Control & Defect Escape</span>
-                <div style="display:flex; align-items:center; gap:0.75rem;">
+                <div>
                   <div class="review-progress-track"><div class="review-progress-fill"></div></div>
                   <strong style="color:#10b981; font-family:var(--font-mono);">0% Errors</strong>
                 </div>
               </div>
               <div class="review-highlight-item">
                 <span>Direct Client Recommendation</span>
-                <div style="display:flex; align-items:center; gap:0.75rem;">
+                <div>
                   <div class="review-progress-track"><div class="review-progress-fill"></div></div>
                   <strong style="color:#10b981; font-family:var(--font-mono);">100%</strong>
                 </div>
@@ -629,7 +629,7 @@
             <div class="reviews-cta-box">
               <div style="font-weight:700; font-size:1.1rem; color:#ffffff;">Have You Worked With Us?</div>
               <p class="reviews-cta-text">Share your project experience with custom feedback and rating.</p>
-              <button class="btn btn-primary btn-sm" data-open-modal="leaveReviewModal">
+              <button type="button" class="btn btn-primary btn-sm" data-open-modal="leaveReviewModal" onclick="openModal('leaveReviewModal')" aria-label="Submit Client Review">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                 <span>Submit Client Review</span>
               </button>
@@ -640,214 +640,16 @@
 
         <!-- Review Category Filter Tabs -->
         <div class="projects-tabs reveal delay-1" style="margin-bottom: 2rem;">
-          <button class="project-tab-btn review-tab-btn active" data-rev-filter="all">All Reviews</button>
-          <button class="project-tab-btn review-tab-btn" data-rev-filter="engineering">Software & Web</button>
-          <button class="project-tab-btn review-tab-btn" data-rev-filter="ai">AI & Automations</button>
-          <button class="project-tab-btn review-tab-btn" data-rev-filter="design">UI/UX & Mobile</button>
-          <button class="project-tab-btn review-tab-btn" data-rev-filter="growth">Growth & Commerce</button>
+          <button type="button" class="project-tab-btn review-tab-btn active" data-rev-filter="all">All Reviews</button>
+          <button type="button" class="project-tab-btn review-tab-btn" data-rev-filter="engineering">Software & Web</button>
+          <button type="button" class="project-tab-btn review-tab-btn" data-rev-filter="ai">AI & Automations</button>
+          <button type="button" class="project-tab-btn review-tab-btn" data-rev-filter="design">UI/UX & Mobile</button>
+          <button type="button" class="project-tab-btn review-tab-btn" data-rev-filter="growth">Growth & Commerce</button>
         </div>
 
-        <!-- Reviews Grid Container (Dynamically displays verified and custom reviews) -->
+        <!-- Reviews Grid Container (Dynamically populated with real client submissions) -->
         <div class="grid-3 reviews-grid" id="reviewsContainer">
-          
-          <!-- Review Card 1 -->
-          <div class="review-card review-card-item reveal" data-rev-category="engineering">
-            <div class="review-card-top">
-              <div class="review-stars-group">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              </div>
-              <span class="review-verified-tag">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>Verified Client</span>
-              </span>
-            </div>
-            <div class="review-project-badge">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-              <span>Telemedicine Portal & Web App</span>
-            </div>
-            <p class="review-quote-text">
-              "NEXON engineered our complete telemedicine infrastructure from architectural design to deployment. Flawless execution, zero downtime, and exceptional communication throughout."
-            </p>
-            <div class="review-client-footer">
-              <div class="review-client-avatar">HT</div>
-              <div class="review-client-info">
-                <h4>Dr. Hamza Tariq</h4>
-                <p>Founder & CEO — HealthTech Solutions</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Review Card 2 -->
-          <div class="review-card review-card-item reveal delay-1" data-rev-category="ai">
-            <div class="review-card-top">
-              <div class="review-stars-group">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              </div>
-              <span class="review-verified-tag">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>Verified Client</span>
-              </span>
-            </div>
-            <div class="review-project-badge">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3"/></svg>
-              <span>AI Data Pipeline & LLM Automation</span>
-            </div>
-            <p class="review-quote-text">
-              "The custom AI automation pipelines delivered by NEXON reduced our manual document processing by 85%. Matching our needs with specialized talent while keeping full QA ownership was a game changer."
-            </p>
-            <div class="review-client-footer">
-              <div class="review-client-avatar">SJ</div>
-              <div class="review-client-info">
-                <h4>Sarah Jenkins</h4>
-                <p>VP of Product — CloudScale UK</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Review Card 3 -->
-          <div class="review-card review-card-item reveal delay-2" data-rev-category="design">
-            <div class="review-card-top">
-              <div class="review-stars-group">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              </div>
-              <span class="review-verified-tag">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>Verified Client</span>
-              </span>
-            </div>
-            <div class="review-project-badge">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-              <span>FinTech Mobile App & UI Design</span>
-            </div>
-            <p class="review-quote-text">
-              "NEXON delivered our iOS and Android mobile app 2 weeks ahead of our product launch date. The UX design systems they established are modern, crisp, and intuitive."
-            </p>
-            <div class="review-client-footer">
-              <div class="review-client-avatar">MV</div>
-              <div class="review-client-info">
-                <h4>Marcus Vance</h4>
-                <p>Operations Lead — NovaFin Global</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Review Card 4 -->
-          <div class="review-card review-card-item reveal" data-rev-category="engineering">
-            <div class="review-card-top">
-              <div class="review-stars-group">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              </div>
-              <span class="review-verified-tag">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>Verified Client</span>
-              </span>
-            </div>
-            <div class="review-project-badge">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-              <span>Enterprise SaaS Platform</span>
-            </div>
-            <p class="review-quote-text">
-              "Clean architecture, robust microservices, and thorough automated testing. Having NEXON manage the technical talent was seamless compared to hiring disjointed contractors."
-            </p>
-            <div class="review-client-footer">
-              <div class="review-client-avatar">OF</div>
-              <div class="review-client-info">
-                <h4>Omar Farooq</h4>
-                <p>Principal Architect — DevCore Systems</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Review Card 5 -->
-          <div class="review-card review-card-item reveal delay-1" data-rev-category="growth">
-            <div class="review-card-top">
-              <div class="review-stars-group">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              </div>
-              <span class="review-verified-tag">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>Verified Client</span>
-              </span>
-            </div>
-            <div class="review-project-badge">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-              <span>E-Commerce Platform & Funnel</span>
-            </div>
-            <p class="review-quote-text">
-              "High-converting storefront rebuild with custom checkout integration. Our store bounce rate dropped by 38% and online sales conversion increased by 42% in month one."
-            </p>
-            <div class="review-client-footer">
-              <div class="review-client-avatar">DM</div>
-              <div class="review-client-info">
-                <h4>David Miller</h4>
-                <p>Managing Partner — Elevate Commerce</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Review Card 6 -->
-          <div class="review-card review-card-item reveal delay-2" data-rev-category="ai">
-            <div class="review-card-top">
-              <div class="review-stars-group">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              </div>
-              <span class="review-verified-tag">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>Verified Client</span>
-              </span>
-            </div>
-            <div class="review-project-badge">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="12 8 8 12 12 16 16 12 12 8"/></svg>
-              <span>AI Agent System & Vector Search</span>
-            </div>
-            <p class="review-quote-text">
-              "From custom embeddings to interactive agent workflows, NEXON took our requirements and delivered a production-ready solution in record time."
-            </p>
-            <div class="review-client-footer">
-              <div class="review-client-avatar">ER</div>
-              <div class="review-client-info">
-                <h4>Elena Rostova</h4>
-                <p>Director of Growth — Synthetix AI</p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Submit Review Bottom Banner -->
-        <div class="glass-card reveal delay-2" style="margin-top: 2.5rem; text-align: center; padding: 2rem 1.5rem; background: var(--bg-card); border-color: rgba(56, 189, 248, 0.25);">
-          <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem;">Have Feedback on a NEXON Delivery?</h3>
-          <p style="font-size: 0.9rem; color: var(--text-secondary); max-width: 580px; margin: 0 auto 1.25rem;">
-            Whether you worked with us on a software build, design project, or AI workflow, your testimonial is published directly to our client wall.
-          </p>
-          <button class="btn btn-primary" data-open-modal="leaveReviewModal">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <span>Write a Custom Client Review</span>
-          </button>
+          <!-- Loaded dynamically from stored & verified client submissions -->
         </div>
 
       </div>
